@@ -16,7 +16,10 @@ use App\Http\Controllers\FrontDoctorController;
 use App\Http\Controllers\FrontBlogController;
 use App\Http\Controllers\FrontPackageController;
 use App\Http\Controllers\AppointmentController; 
-use App\Http\Controllers\attendences; 
+use App\Http\Controllers\attendences;
+use App\Http\Controllers\IpAddressController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\SettingsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -84,3 +87,12 @@ Route::get('/',function(){
 
 
 Route::get('/comeoffice/{id}',[attendences::class,'comeoffice'])->name('comeoffice');
+
+
+
+
+Route::get('/settings',[IpAddressController::class,'index'])->name('settings');
+Route::post('storeip',[IpAddressController::class,'store'])->name('storeip');
+Route::get('settings',[IpAddressController::class,'show'])->name('settings');
+
+Route::get('loginuser',[LoginController::class,'login'])->name('loginuser');

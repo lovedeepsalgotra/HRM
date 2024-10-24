@@ -12,6 +12,12 @@
                   <li class="breadcrumb-item active" aria-current="page">Attendence List</li> 
                 </ol>
               </nav>
+
+              
+              @if (@session()->has('error'))
+                  <div class="alert alert-danger">{{session()->get('error')}}</div>    
+               @endif
+
             </div>
           
           </div>

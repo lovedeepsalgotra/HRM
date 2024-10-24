@@ -5,9 +5,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use App\Models\Attendence;
 use App\Models\Employee;
+use App\Models\IpAddress;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Contracts\Encryption\DecryptException;
-
+use Illuminate\Support\Facades\DB;
 
 class attendences extends Controller
 {
@@ -453,6 +454,28 @@ public function del_emp_de(Request $request){
         }catch(DecryptException $e){
             return "Invalid ID";
         }
+
+        DB::enableQueryLog();
+
+        // echo "<pre>";
+        
+        // print_r($_SERVER);
+        // die();
+        //get user ip address
+        $userip = $request->ip();
+        //dd($userip);
+
+        //get ip address from DB
+        $IpAddress = IpAddress::where('ip_address',$userip)->first();
+        //dd($IpAddress);
+
+        if(!$IpAddress){
+         //dd(DB::getQueryLog());
+            return redirect()->route('emplist')->with('error','Your IP Address does not match ');
+        }
+        //dd(DB::getQueryLog());
+
+
         
         $login_default_time = '09:25:00';
         $logout_default_time = '19:00:00';
@@ -472,7 +495,7 @@ public function del_emp_de(Request $request){
         
         if(!$employee){
             return "Invalid ID.";
-        }else{
+        }else{        
            $today = date("Y-m-d");
         date_default_timezone_set('Asia/Kolkata');
         $currentTime = date('H:i:s', time());
@@ -616,12 +639,17 @@ $data = Attendence::where('emp_id', $id)
 ->first();
 
 
+// if (@session()->has('error')){
+// <div class='alert alert-danger'>session()->get('error')</div>
+// }    
 
-        echo '<h1 style="text-align: center">Hi '.$employee->name.'!<br>Thank You, Your attendance has been marked.</h1><br><b style="color:green">login time: '.date("h:i a", strtotime($data->log_in)).'<br><br><b style="color:red"> log out time:'.(($data->log_out!=NULL) ? date("h:i a", strtotime($data->log_out)) : 'Not Available'); 
+
+        echo ' <h1 style="text-align: center">Hi '.$employee->name.'!<br>Thank You, Your attendance has been marked.</h1><br><b style="color:green">login time: '.date("h:i a", strtotime($data->log_in)).'<br><br><b style="color:red"> log out time:'.(($data->log_out!=NULL) ? date("h:i a", strtotime($data->log_out)) : 'Not Available'); 
         }
 
         
     }
+
 
     public function attendencelist()
     {

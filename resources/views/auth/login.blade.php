@@ -21,6 +21,9 @@
                         
                     </div>
                     <div class="card-body px-lg-5 py-lg-5">
+                        {{-- @if (@session()->has('error'))
+                            <div class="alert alert-danger">{{session()->get('error')}}</div>    
+                         @endif --}}
                        
                         <form role="form" method="POST" action="{{ route('login') }}">
                             @csrf
